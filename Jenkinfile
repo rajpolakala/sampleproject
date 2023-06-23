@@ -1,0 +1,16 @@
+pipeline {
+  agent {label 'MSBUILD'}
+
+  stages {
+    stage('Check .NET Version') {
+      steps {
+        script {
+          def dotnetRoot = sh(returnStdout: true, script: 'echo $DOTNET_ROOT').trim()
+          def versionRegex = /\d+\.\d+\.\d+/
+          def dotnetVersion = versionRegex.matcher(dotnetRoot).find() ? versionRegex.matcher(dotnetRoot).group() : 'Unknown'
+          echo "Installed .NET SDK version: ${dotnetVersion}"
+        }
+      }
+    }
+  }
+}
