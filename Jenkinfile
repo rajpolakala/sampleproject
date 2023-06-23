@@ -2,13 +2,15 @@ pipeline {
   agent any
 
   stages {
-    stage('Check .NET Version') {
+    stage('Check MSBuild') {
       steps {
         script {
-          def dotnetPath = sh(returnStdout: true, script: 'which dotnet').trim()
-          def versionRegex = /(\d+\.\d+\.\d+)/
-          def dotnetVersion = versionRegex.matcher(dotnetPath).find() ? versionRegex.matcher(dotnetPath).group(1) : 'Unknown'
-          echo "Installed .NET SDK version: ${dotnetVersion}"
+          def msbuildPath = sh(returnStdout: true, script: 'which msbuild').trim()
+          if (msbuildPath) {
+            echo "MSBuild found at: ${msbuildPath}"
+          } else {
+            echo "MSBuild not found. Please ensure it is installed and accessible in the PATH."
+          }
         }
       }
     }
