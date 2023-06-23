@@ -5,11 +5,20 @@ pipeline {
     stage('Check MSBuild') {
       steps {
         script {
-          def msbuildPath = sh(returnStdout: true, script: 'which msbuild').trim()
-          if (msbuildPath) {
-            echo "MSBuild found at: ${msbuildPath}"
+          if (isUnix()) {
+            def msbuildPath = sh(returnStdout: true, script: 'which msbuild').trim()
+            if (msbuildPath) {
+              echo "MSBuild found at: ${msbuildPath}"
+            } else {
+              echo "MSBuild not found. Please ensure it is installed and accessible in the PATH."
+            }
           } else {
-            echo "MSBuild not found. Please ensure it is installed and accessible in the PATH."
+            def msbuildPath = bat(returnStdout: true, script: 'where msbuild').trim()
+            if (msbuildPath) {
+              echo "MSBuild found at: ${msbuildPath}"
+            } else {
+              echo "MSBuild not found. Please ensure it is installed and accessible in the PATH."
+            }
           }
         }
       }
