@@ -1,7 +1,12 @@
 pipeline {
-  agent any
+  agent { label 'MSBUILD19'}
 
   stages {
+    stage('checkout') {
+        steps {
+            git branch: 'main', url: 'https://github.com/rajpolakala/sampleproject.git'
+        }
+    }
     stage('Build') {
       steps {
         script {
@@ -24,3 +29,4 @@ def findMsBuildPath() {
     error "MSBuild path not found"
   }
 }
+
