@@ -2,26 +2,25 @@ pipeline {
   agent any
 
   stages {
-    stage('Check MSBuild') {
+    stage('Build') {
       steps {
         script {
-          if (isUnix()) {
-            def msbuildPath = sh(returnStdout: true, script: 'which msbuild').trim()
-            if (msbuildPath) {
-              echo "MSBuild found at: ${msbuildPath}"
-            } else {
-              echo "MSBuild not found. Please ensure it is installed and accessible in the PATH."
-            }
-          } else {
-            def msbuildPath = bat(returnStdout: true, script: 'where msbuild').trim()
-            if (msbuildPath) {
-              echo "MSBuild found at: ${msbuildPath}"
-            } else {
-              echo "MSBuild not found. Please ensure it is installed and accessible in the PATH."
-            }
-          }
+          def msbuildPath = findMsBuildPath()
+          def solutionFilePath = "HelloWorld.sln"
+
+          // Run the MSBuild command to build the solution
+          bat "\"${msbuildPath}\" \"${solutionFilePath}\" /p:Configuration=Release"
         }
       }
     }
+  }
+}
+
+def findMsBuildPath() {
+  def msbuildDir = findFiles(glob: "E:/tools/**/MSBuild.exe")[0]?.parent
+  if (msbuildDir) {
+    return msbuildDir.path + "\\MSBuild.exe"
+  } else {
+    error "MSBuild path not found"
   }
 }
