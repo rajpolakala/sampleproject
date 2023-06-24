@@ -22,11 +22,12 @@ pipeline {
 }
 
 def findMsBuildPath() {
-  def msbuildDir = findFiles(glob: "E:/tools/**/MSBuild.exe")[0]?.parent
+  def msbuildDir = findFiles(glob: "E:/tools/**/*MSBuild.exe")[0]?.parent
   if (msbuildDir) {
     return msbuildDir.path + "\\MSBuild.exe"
   } else {
     error "MSBuild path not found"
   }
 }
+
 
