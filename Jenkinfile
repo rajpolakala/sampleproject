@@ -1,5 +1,7 @@
 pipeline {
-  agent { label '19763'}
+  agent {
+    label '19763'
+  }
 
   stages {
     stage('Build') {
@@ -16,7 +18,6 @@ pipeline {
   }
 }
 
-
 def findMsBuildPath() {
   def msbuildFiles = findFiles(glob: "E:/tools/**/MSBuild.exe")
   if (!msbuildFiles.isEmpty()) {
@@ -25,5 +26,3 @@ def findMsBuildPath() {
     error "MSBuild path not found"
   }
 }
-
-
