@@ -1,5 +1,5 @@
 pipeline {
-  agent { label 'MSBUILD19'}
+  agent { label '19763'}
 
   stages {
     stage('Build') {
